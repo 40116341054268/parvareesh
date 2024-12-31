@@ -1,0 +1,53 @@
+from transitions import Machine
+
+class VoiceAssistant:
+    def init(self):
+        
+        states = ['start', 'listening', 'processing_weather', 'processing_light', 
+                  'processing_reminder', 'calling_contact', 'reading_story', 
+                  'performing_math', 'responding', 'error']
+        
+         
+        self.machine = Machine(model=self, states=states, initial='start')
+        
+       
+        self.machine.add_transition('start_listening', 'start', 'listening')
+        self.machine.add_transition('process_weather', 'listening', 'processing_weather', after='get_weather')
+        self.machine.add_transition('process_light', 'listening', 'processing_light', after='control_light')
+        self.machine.add_transition('process_reminder', 'listening', 'processing_reminder', after='set_reminder')
+        self.machine.add_transition('call_contact', 'listening', 'calling_contact', after='make_call')
+        self.machine.add_transition('read_story', 'listening', 'reading_story', after='tell_story')
+        self.machine.add_transition('perform_math', 'listening', 'performing_math', after='do_math')
+        self.machine.add_transition('respond', '*', 'responding', after='send_response')
+        self.machine.add_transition('handle_error', '*', 'error', after='report_error')
+        self.machine.add_transition('reset', '*', 'listening')
+    
+    def get_weather(self):
+        print("Fetching weather information...")
+    
+    def control_light(self):
+        print("Turning the lights off...")
+    
+    def set_reminder(self):
+        print("Setting a reminder...")
+    
+    def make_call(self):
+        print("Calling contact...")
+    
+    def tell_story(self):
+        print("Reading a story...")
+    
+    def do_math(self):
+        print("Performing a math operation...")
+    
+    def send_response(self):
+        print("Responding to user...")
+    
+    def report_error(self):
+        print("An error occurred.")
+
+assistant = VoiceAssistant()
+assistant.start_listening()
+assistant.call_contact()
+assistant.respond()
+assistant.reset()
